@@ -15,15 +15,23 @@ db_url = URL.create(drivername = "sqlite",
                         database = "exp.db")
 print("Database URL: ",db_url)
 
-engine = create_engine(db_url,echo = True)
+engine = create_engine(db_url,echo = False)
+
+table_name = "users"
+users_fields ={"is":"int",
+                "username": "varchar(64)", 
+                "aboutme": "varchar(256)",
+                "email": "varchar(128)",
+                "password": "varchar(128)",
+                }
 
 with engine.connect() as conn:
 
-    if conn.dialect.has_table(conn,"users"):
+    if conn.dialect.has_table(conn,table_name):
         conn.execute(text("drop table users"))
 
     try:
-        conn.execute(text( "CREATE TABLE users (id int primary_key, \
+        conn.execute(text( "CREATE TABLE "+table_name+" (id int primary_key, \
                         username varchar(64), \
                         aboutme varchar(256),\
                         email varchar(128),\
